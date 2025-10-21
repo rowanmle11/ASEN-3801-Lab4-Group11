@@ -1,0 +1,34 @@
+clear
+clc
+close all
+
+g = 9.81;
+m = 0.068;
+I = [5.8e-5; 7.2e-5; 1.0e-4];
+d = 0.06;
+km = 0.0024;
+nu = 1e-3;
+mu = 2e-6;
+
+t0 = 0;
+tf = 10;
+tspan = [t0 tf];
+tols = odeset('RelTol', 1e-12, 'Abstol', 1e-12);
+
+W = m*g;
+f1 = W/4; f2 = W/4; f3 = W/4; f4 = W/4;
+motor_forces = [f1; f2; f3; f4];
+
+var0 = zeros(12,1);
+
+[t, var] = ode45(@(t,var) QuadrotorEOM(t, var, g, m, I, d, km, nu, mu, motor_forces), tspan, var0, tols);
+
+Zc = -sum(motor_forces);
+Lc = (d/sqrt(2))*(-motor_forces(1) - motor_forces(2) + motor_forces(3) + motor_forces(4));
+Mc = (d/sqrt(2))*(motor_forces(1) - motor_forces(2) - motor_forces(3) + motor_forces(4));
+Nc = km*(motor_forces(1) - motor_forces(2) + motor_forces(3) - motor_forces(4));
+control_input_array = repmat([Zc; Lc; Mc; Nc], 1, length(t));
+
+fig = 1:6;
+PlotAircraftSim(t', var', control_input_array, fig, 'b-')
+sgtitle('Hover Simulation - Task 1')
