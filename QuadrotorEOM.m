@@ -11,27 +11,24 @@ function var_dot = QuadrotorEOM(t, var, g, m, I, d, km, nu, mu, motor_forces)
     yE = var(2);
     zE = var(3);
     phi = var(4);
+    %phi = deg2rad(5);
     theta = var(5);
+    %theta = deg2rad(5);
     psi = var(6);
+    %psi = deg2rad(5);
     uE = var(7);
     vE = var(8);
     wE = var(9);
     p = var(10);
+    %p = 0.1;
     q = var(11);
-    r = var(12);
+    %q = 0.1;
+    %r = var(12);
+    r = 0.1;
 
     Ix = I(1);
     Iy = I(2);
     Iz = I(3);
-
-    Va = sqrt(uE^2 + vE^2 + wE^2);
-    X = -nu*Va*uE;
-    Y = -nu*Va*vE;
-    Z = -nu*Va*wE;
-
-    L = -mu*sqrt(p^2 + q^2 + r^2)*p;
-    M = -mu*sqrt(p^2 + q^2 + r^2)*q;
-    N = -mu*sqrt(p^2 + q^2 + r^2)*r;
 
     Zc = -motor_forces(1) - motor_forces(2) - motor_forces(3) - motor_forces(4);
     Lc = motor_forces(1)*-d/sqrt(2) + motor_forces(2)*-d/sqrt(2) + motor_forces(3)*d/sqrt(2) + motor_forces(4)*d/sqrt(2);
@@ -48,13 +45,13 @@ function var_dot = QuadrotorEOM(t, var, g, m, I, d, km, nu, mu, motor_forces)
     thetaDot = (0)*p + (cos(phi))*q + (-sin(phi))*r;
     psiDot = (0)*p + (sin(phi)*sec(theta))*q + (cos(phi)*sec(theta))*r;
 
-    uEDot = (r*vE - q*wE) + g*(-sin(theta)) + (X/m) + (0)/m;
-    vEDot = (p*wE - r*uE) + g*(cos(theta)*sin(phi)) + (Y/m) + (0)/m;
-    wEDot = (q*uE - p*vE) + g*(cos(theta)*cos(phi)) + (Z/m) + (Zc)/m;
+    uEDot = (r*vE - q*wE) + g*(-sin(theta)) + (0)/m;
+    vEDot = (p*wE - r*uE) + g*(cos(theta)*sin(phi)) + (0)/m;
+    wEDot = (q*uE - p*vE) + g*(cos(theta)*cos(phi)) + (Zc)/m;
 
-    pDot = (q*r*(Iy - Iz)/Ix) + (L/Ix) + (Lc/Ix);
-    qDot = (p*r*(Iz - Ix)/Iy) + (M/Iy) + (Mc/Iy);
-    wDot = (q*q*(Ix - Iy)/Iz) + (N/Iz) + (Nc/Iz);
+    pDot = (q*r*(Iy - Iz)/Ix) + (Lc/Ix);
+    qDot = (p*r*(Iz - Ix)/Iy) + (Mc/Iy);
+    wDot = (q*q*(Ix - Iy)/Iz) + (Nc/Iz);
 
 % Pack and output state vector
     var_dot = [xEDot yEDot zEDot phiDot thetaDot psiDot uEDot vEDot wEDot qDot pDot wDot]';

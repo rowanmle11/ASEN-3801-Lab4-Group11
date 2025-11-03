@@ -2,7 +2,6 @@
 % Date: 10/14/2025
 % Lab 4 - Quadrotor Simulation and Control
 
-% Housekeeping
 clear
 clc
 close all
@@ -54,5 +53,11 @@ Mc = (d/sqrt(2))*(motor_forces(1) - motor_forces(2) - motor_forces(3) + motor_fo
 Nc = km*(motor_forces(1) - motor_forces(2) + motor_forces(3) - motor_forces(4));
 control_input_array = repmat([Zc; Lc; Mc; Nc], 1, length(t));
 
+deltaFc = [0;0;0];
+deltaGc = [0;0;0];
+
+[t_lin, var_lin] = ode45(@(t,var) QuadrotorEOM_Linearized(t,var,g,m,I,deltaFc,deltaGc), tspan, var0, tols);
+
 fig = 1:6;
 PlotAircraftSim(t', var', control_input_array, fig, 'b-')
+PlotAircraftSim(t_lin', var_lin', zeros(4,length(t_lin)), fig, 'r--')
