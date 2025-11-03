@@ -19,8 +19,8 @@ function var_dot = QuadrotorEOM_Linearized(t, var, g, m, I, deltaFc, deltaGc)
     %p = 0.1;
     q = var(11);
     %q = 0.1;
-    %r = var(12);
-    r = 0.1;
+    r = var(12);
+    %r = 0.1;
 
     dZc = deltaFc(3);
     dLc = deltaGc(1);
