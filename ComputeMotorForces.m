@@ -3,22 +3,6 @@
 % Purpose: Create a function to calculate motor thrust forces given the
 % control forces and moments for a quadcopter of standard design.
 
-% % Test Main
-% % Housekeeping
-% clc;
-% clear;
-% close all;
-% 
-% % Declare Fc and Gc (normally outputs from the RotationDerivativeFeedback
-% % function. 
-% Fc = [0, 0, 1];
-% Gc = [1, 1, 1];
-% d = 1;
-% km = 1;
-% 
-% % Call ComputeMotorForces
-% motor_forces = ComputeMotorForces(Fc,Gc,d,km);
-
 function motor_forces = ComputeMotorForces(Fc, Gc, d, km)
 % Definition of Variables
 % Fc is the control thrust vector
@@ -42,4 +26,5 @@ A = [-1, -1, -1, -1;
 % multiplication by the inverse for MATLAB.
 motor_forces = A\zlmn;
   
+
 end
