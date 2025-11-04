@@ -15,11 +15,12 @@ function [Fc, Gc] = InnerLoopFeedback(var)
 
     m = .068;
     g = 9.81;
-    Lc = 0;
-    Mc = 0;
-    Nc = 0;
+    Lc = -0.00116*phi - 0.000696*p;
+    Mc = -0.00144*theta - 0.000864*q;
+    Nc = -0.004*r;
     Fc = [0 0 m*g/(cos(phi)*cos(theta))]';
     Gc = [Lc Mc Nc]';
+
 
 
 end
