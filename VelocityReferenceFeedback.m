@@ -1,15 +1,17 @@
 function [Fc, Gc] = VelocityReferenceFeedback(t, var)
 
-m = 1.5;
-g = 9.80665;
+g = 9.81;
+m = 0.068;
 T = 2.0; % time
-s_target = 1.0; % distance to target
+distance = 1;
 
-k1x = 6.96e-4;
-k2x = 1.16e-3;
-k1y = 8.64e-4;
-k2y = 1.44e-3;
-k_yaw = 4e-3;
+kp = 0.000696;
+kphi = 0.00116;
+kq = 0.000864;
+ktheta = 0.00144;
+kr = .004;
+ku = .001;
+kv = .001;
 
 xE = var(1);
 yE = var(2);
@@ -24,31 +26,24 @@ p = var(10);
 q = var(11);
 r = var(12);
 
-Vp = (pi * s_target) / (2 * T); % peak velocity
-if t < 0 || t > T
-    u_ref = 0;
-    v_ref = 0;
+if t < T
+    uRef = .5;
+    vRef = .5;
 else
-    u_ref = Vp * sin(pi * t / T);   % inertial x velocity reference
-    v_ref = Vp * sin(pi * t / T);   % inertial y velocity reference
+    uRef = 0;   % inertial x velocity reference
+    vRef = 0;   % inertial y velocity reference
 end
-
-e_u = u_ref - u;
-e_v = v_ref - v;
-
-theta_ref = k1x * e_u;   % desired pitch
-phi_ref   = k1y * e_v;   % desired roll
 
 %% Moments
 
-Mx = k1y*(phi_ref - phi) + k2y*(-p);
-My = k1x*(theta_ref - theta) + k2x*(-q);
-Mz = -k_yaw*r;
+Lc = -kphi*phi - kp*p + kv*(vRef - vE);
+Mc = -ktheta*theta - kq*q - ku*(uRef - uE);
+Nc = -kr*r;
 
-Gc = [Mx; My; Mz];
+Gc = [Lc; Mc; Nc];
 
 %% Force command
 
-Fc = [0; 0; m*g];
+Fc = [0; 0; -m*g/(cos(phi)*cos(theta))];
 
 end

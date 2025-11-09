@@ -11,7 +11,6 @@ mu = 2e-6;
 t0 = 0;
 tf = 10;
 tspan = [t0 tf];
-%tols = odeset('RelTol', 1e-12, 'Abstol', 1e-12);
 uEE0 = 0;
 vEE0 = 0;
 wEE0 = 0;
@@ -20,7 +19,7 @@ VEE0 = [uEE0 vEE0 wEE0]';
 xE0 = 0;
 yE0 = 0;
 zE0 = 0;
-phi0 = deg2rad(5);
+phi0 = 0;
 theta0 = 0;
 psi0 = 0;
 
@@ -38,7 +37,7 @@ var0 = [xE0 yE0 zE0 phi0 theta0 psi0 uE0 vE0 wE0 p0 q0 r0];
 [t, var] = ode45(@(t,var) QuadrotorEOM_NonlinearOpenLoop(t, var, g, m, I, d, km, nu, mu), tspan, var0);
 
 for i = 1   :length(var)
-    [Fc(i, :), Gc(i, :)] = VelocityReferenceFeedback(var(i, :));
+    [Fc(i, :), Gc(i, :)] = VelocityReferenceFeedback(t(i),var(i, :));
 end
 Zc = Fc(:, 3);
 Lc = Gc(:, 1);

@@ -28,7 +28,7 @@ function var_dot = QuadrotorEOM_NonlinearOpenLoop(t, var, g, m, I, d, km, nu, mu
     M = -mu*sqrt(p^2 + q^2 + r^2)*q;
     N = -mu*sqrt(p^2 + q^2 + r^2)*r;
 
-    [Fc, Gc] = VelocityReferenceFeedback(var);
+    [Fc, Gc] = VelocityReferenceFeedback(t, var);
 
     xEDot = (cos(theta)*cos(psi))*uE + (sin(phi)*sin(theta)*cos(psi) - cos(phi)*sin(psi))*vE + (cos(phi)*sin(theta)*cos(psi) + sin(phi)*sin(psi))*wE;
     yEDot = (cos(theta)*sin(psi))*uE + (sin(phi)*sin(theta)*sin(psi) + cos(phi)*cos(psi))*vE + (cos(phi)*sin(theta)*sin(psi) - sin(phi)*cos(psi))*wE;
